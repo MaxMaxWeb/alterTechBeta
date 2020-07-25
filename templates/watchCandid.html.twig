@@ -1,0 +1,221 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+
+    <div class="container mt-3 text-white">
+        <div class="d-flex justify-content-around">
+            <h4>  Candidature de :
+                {% for a in c.apprentis %}
+                    {{ a.pseudo }}
+                {% endfor %}
+            </h4>
+        </div>
+        <hr class="bg-light">
+        {% if c.lettredemotiv is not null %}
+            <button onclick="go()" id="btnl"  class=" btn btn-success d-none"  data-toggle="modal" data-target="#ldmModal"> Lettre de motivation </button>
+        {% endif %}
+        <button class="btn-success btn mx-3" data-toggle="modal" data-target="#repModal"> Répondre à cette candidature</button>
+        <div class="d-flex justify-content-center mt-3">
+
+
+            <canvas id="pdf-render">
+
+            </canvas>
+            <div class="ml-2">
+                <p> <i onclick="resize()" class="fas fa-search-plus clickable"></i> </p>
+                <hr>
+            </div>
+        </div>
+        <div class="d-flex justify-content-around">
+            <div class="pdfcontroller  ">
+                <span id="page-num"></span> / <span id="page-count"></span>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="modal" style="" tabindex="-1" role="dialog" id="ldmModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Lettre de motivation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="align-content-center">
+                    <canvas id="ldm">
+
+                    </canvas>
+                    </div>
+                    <div class="ml-2">
+                        <p> <i onclick="resize()" class="fas fa-search-plus clickable"></i> </p>
+                        <hr>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-around">
+                    <div class="pdfcontroller  ">
+                        <span id="page-numB"></span> / <span id="page-countB"></span>
+
+                    </div>
+                </div>
+                </div>
+
+            </div>
+        </div>
+
+    <div class="modal fade" id="repModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Répondre à la candidature</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    {{ form(form) }}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf.min.js"></script>
+
+    <script>
+
+
+        let url = "{{ asset('assets/uploads/images/') }}{{ c.cv }}"
+       let  pdfDoc = null;
+       let  pageNum = 1
+        pageIsrendreing = false;
+         pageNumisPending = null;
+        function resize () {
+            document.getElementById('pdf-render').style.width = "900px";
+        }
+         scale = 1.25
+        canvas = document.querySelector('#pdf-render'),
+            ctx = canvas.getContext('2d');
+        // Render the page
+        let renderPage = num =>{
+            pageIsrendreing = true;
+            // Get the page
+            pdfDoc.getPage(num).then(page => {
+                //set scale
+               let  viewport = page.getViewport({ scale })
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+              let   renderCtx = {
+                    canvasContext: ctx,
+                    viewport
+                }
+
+                page.render(renderCtx).promise.then(() => {
+                    pageIsrendreing = false;
+                    if(pageNumisPending !== null){
+                        renderPage(pageNumisPending);
+                        pageNumisPending = null;
+                    }
+                });
+                document.querySelector('#page-num').textContent = num
+            })
+        }
+        // Check for pages rendering
+       let  queueRenderPage = num => {
+            if (pageIsrendreing) {
+                pageNumIsPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        // Get the doc
+        // const pdfjs = await import('pdfjs-dist/build/pdf');
+        // const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+        // pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+        pdfjsLib.getDocument(url).promise.then(pdfDoc_  => {
+            pdfDoc = pdfDoc_;
+            document.querySelector('#page-count').textContent = pdfDoc.numPages;
+            renderPage(pageNum);
+            let btn = document.getElementById('btnl');
+            btn.classList.remove('d-none')
+        });
+
+
+    </script>
+
+    <script>
+
+        function go(){
+             url = "{{ asset('assets/uploads/images/') }}{{ c.lettredemotiv }}"
+             pdfDoc = null;
+             pageNum = 1
+            pageIsrendreing = false;
+             pageNumisPending = null;
+
+            function resizeB() {
+                document.getElementById('ldm').style.width = "900px";
+            }
+
+             scale = 1.25
+          let  canv = document.querySelector('#ldm'),
+
+                ctx = canv.getContext('2d');
+            // Render the page
+             renderPage = num => {
+                pageIsrendreing = true;
+                // Get the page
+                pdfDoc.getPage(num).then(page => {
+                    //set scale
+                     viewport = page.getViewport({scale})
+                    canv.height = viewport.height;
+                    canv.width = viewport.width;
+                     renderCtx = {
+                        canvasContext: ctx,
+                        viewport
+                    }
+                  page.render(renderCtx).promise.then(() => {
+                        pageIsrendreing = false;
+                        if (pageNumisPending !== null) {
+                            renderPage(pageNumisPending);
+                            pageNumisPending = null;
+                        }
+                    });
+                    document.querySelector('#page-numB').textContent = num
+                })
+            }
+            // Check for pages rendering
+             queueRenderPage = num => {
+                if (pageIsrendreing) {
+                    pageNumisPending = num;
+                } else {
+                    renderPage(num);
+                }
+            }
+
+            // Get the doc
+            // const pdfjs = await import('pdfjs-dist/build/pdf');
+            // const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+            // pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+            pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
+
+                pdfDoc = pdfDoc_;
+
+
+                document.querySelector('#page-countB').textContent = pdfDoc.numPages;
+
+                    renderPage(pageNum);
+
+
+            });
+        }
+    
+
+    </script>
+{% endblock %}

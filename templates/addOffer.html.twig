@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+    <div class="container mt-3 text-white">
+        <div class="d-flex justify-content-between">
+            <h5> Ajouter une offre</h5>
+
+
+        </div>
+        <hr class="bg-light">
+        {{ form(form) }}
+
+    </div>
+
+{% endblock %}

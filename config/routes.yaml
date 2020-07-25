@@ -1,3 +1,84 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+home:
+  path: /home
+  controller: App\Controller\DefaultController::homeAction
+
+whoareyou:
+  path: /whoareyou
+  controller: App\Controller\DefaultController::whoAreYouAction
+
+signup:
+  path: /signup
+  controller: App\Controller\UserController::signupAction
+
+login:
+  path: /login
+
+default:
+  path: /
+  controller: App\Controller\DefaultController::homeAction
+
+homeEntr:
+  path: /homeEntr
+  controller: App\Controller\DefaultController::homeEntrAction
+
+homeAppr:
+  path: /homeAppr
+  controller: App\Controller\DefaultController::homeApprAction
+
+addOffer:
+  path: /addOffer
+  controller: App\Controller\UserController::addOfferAction
+
+updateOffer:
+  path: /{id}/upOffr
+  controller: App\Controller\UserController::updateOffer
+
+
+seeOffr:
+  path: /seeOffer/{id}
+  controller: App\Controller\UserController::seeOffer
+
+candid:
+  path: /candid/{id}
+  controller: App\Controller\UserController::candidAction
+
+
+watchCandid:
+  path: /wtccandid/{id}
+  controller: App\Controller\UserController::watchAction
+
+listC:
+  path: /lstcand/{id}
+  controller: App\Controller\UserController::listCandid
+
+entprofil:
+  path: /entprofil/{id}
+  controller: App\Controller\UserController::entProfilAction
+
+appprofil:
+  path: /appprofil/{id}
+  controller: App\Controller\UserController::appProfilAction
+
+updateapprofil:
+  path: /upaprofil/{id}
+  controller: App\Controller\UserController::upAprofilAction
+
+updateentprofil:
+  path: /upeprofil/{id}
+  controller: App\Controller\UserController::upEntProfilAction
+
+ping:
+  path: /ping
+  controller: App\Controller\UserController::ping
+
+
+
+
+
+
+
+
+

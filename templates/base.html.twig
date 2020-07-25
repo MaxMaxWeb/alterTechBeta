@@ -1,12 +1,99 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/css/particles.css') }}">
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/owlCarousselScript/owl.carousel.min.css') }}" type="text/css">
+
+</head>
+
+
+
+
+
+<!-- particles.js container -->
+<body class="black-bg">
+
+
+        {% block body %}
+        {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {% block particles %}
+        <script src="{{ asset('assets/js/particles.js') }}"></script>
+        <script src="{{ asset('assets/js/app.js') }}"></script>
+        {% endblock %}
+
+        <script type="text/javascript">
+
+            const _receiver = document.getElementById('mercure-content-receiver');
+            const _messageInput = document.getElementById('mercure-message-input');
+            const _sendForm = document.getElementById('mercure-message-form');
+
+            const sendMessage = (message) => {
+                if (message === '') {
+                    return;
+                }
+
+                fetch(_sendForm.action, {
+                    method: _sendForm.method,
+                    body: 'message=' + message,
+                    headers: new Headers({
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    })
+                }).then(() => {
+                    _messageInput.value = '';
+                });
+            };
+
+            _sendForm.onsubmit = (evt) => {
+                sendMessage(_messageInput.value);
+
+                evt.preventDefault();
+                return false;
+            };
+
+            const url = new URL('{{ mercure_publish_url }}');
+            url.searchParams.append('topic', 'http://localhost:8000/test');
+            const eventSource = new EventSource(url);
+            console.log(eventSource)
+            eventSource.onmessage = (evt) => {
+                const data = JSON.parse(evt.data);
+
+                if (!data.message) {
+                    return;
+                }
+                _receiver.insertAdjacentHTML('beforeend', `<div class="message">${data.message}</div>`);
+            };
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+        <script src="{{ asset('assets/owlCarousselScript/owl.carousel.min.js') }}"></script>
+        <script src="{{ asset('assets/owlCarousselScript/show.js') }}"></script>
+
+
+</body>
+
+<!-- Latest compiled and minified JavaScript -->
 </html>

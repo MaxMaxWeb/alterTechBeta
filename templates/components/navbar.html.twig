@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-dark text-white">
+    <a class="navbar-brand text-white" href="#"> alterTech</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse text-white" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item text-white">
+                {% if entId is defined %}
+                <a class="nav-link text-white" href="{{ path ('entprofil', {'id': entId}) }}">Mon Profil</a>
+                {% endif %}
+                {% if  appId is defined %}
+                <a class="nav-link text-white" href="{{ path ('appprofil', {'id': appId}) }}">Mon Profil</a>
+                {% endif %}
+
+            </li>
+        </ul>
+        <div>
+             <a href="#" class="inline-block text-sm px-4 py-2    text-white  mt-4 lg:mt-0"> <i class="far fa-lg fa-bell"></i> </a>
+            <a href="/logout" class="inline-block text-sm px-4 py-2   text-white    mt-4 lg:mt-0"> <i class="fas fa-lg fa-power-off"></i> </a>
+
+    </div>
+    </div>
+</nav>
+
+
+
+<!-- <nav class="flex items-center justify-between flex-wrap bg-black p-6">
+    <div class="flex items-center flex-shrink-0 text-white mr-6">
+        <span class="font-semibold text-xl tracking-tight">alterTech</span>
+    </div>
+
+    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+        <div class="text-sm  lg:flex-grow">
+            <a href="#responsive-header" class=" font-semibold block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-900 mr-4">
+                Mon profil
+            </a>
+
+        </div>
+        <div>
+            <a href="#" class="inline-block text-sm px-4 py-2 leading-none rounded  text-white  hover:text-gray-900 hover:bg-white mt-4 lg:mt-0"> <i class="far fa-lg fa-bell"></i> </a>
+            <a href="#" class="inline-block text-sm px-4 py-2 leading-none rounded  text-white  hover:text-gray-900 hover:bg-white mt-4 lg:mt-0"> <i class="far fa-lg fa-envelope"></i> </a>
+            <a href="#" class="inline-block text-sm px-4 py-2 leading-none rounded  text-white  hover:text-gray-900 hover:bg-white mt-4 lg:mt-0"> <i class="far fa-lg fa-power-off"></i></i> </a>
+        </div>
+    </div>
+</nav> -->
+
+
+
+

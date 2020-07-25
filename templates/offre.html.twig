@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+
+    <div class="container mt-3 text-white">
+        {% for off in offre %}
+        <h2> {{ off.name }}</h2>
+            <hr class="bg-light">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between">
+                    <p> publié le {{ off.createdat | date ('d/m/Y') }}</p>
+                    {% if off.nbcandidats != null %}
+                    <p> {{ off.candidatures | length }} candidats</p>
+                    {% else %}
+                         <p> 0 candidats </p>
+                        {% endif %}
+                </div>
+                <div class="container">
+                    <p> Lieu : {{ off.ville }}</p>
+                    <p> Entreprise : {{ off.entreprises.name }}</p>
+                    {% if off.domaine != null %}
+                        <p> Domaine : {{ off.domaine.name }}</p>
+                    {% endif %}
+                    <p> Niveau: {{ off.niveau.name }}</p>
+                    <p> Description du poste :</p>
+
+                    <p class="desc"> {{ off.description }}</p>
+
+                    <p> Salaire: {{ off.salaire }} €</p>
+                    <p> Date de début: {{ off.beginat | date ('d/m/Y') }}</p>
+                    <div class="d-flex justify-content-between">
+                    {% if off.duree == 1 %}
+                    <p> Durée: {{ off.duree }} an</p>
+                    {% else %}
+                    <p> Durée: {{ off.duree }} ans</p>
+                        {% endif %}
+                        <a href="{{ path('candid', {"id": off.id}) }}" class="btn btn-primary noLink"> Postuler</a>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+
+

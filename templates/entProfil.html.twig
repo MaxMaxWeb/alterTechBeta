@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+
+    <div class="container mt-3 text-white">
+        <div class="d-flex justify-content-around">
+            <h4>  Votre Profil </h4>
+            <a href="{{ path('updateentprofil', { 'id' : e.id}) }}" class="noLink"> <i class="fas fa-cog"></i> Modifier </a>
+        </div>
+        <hr class="bg-light">
+        <div class="container">
+            <p> pseudo : {{ e.name }}</p>
+            <p> Ville : {{ e.ville }}</p>
+
+            <p> Domaine : {{ e.domaine.name }}</p>
+            <p> Description : {% if e.description is not null %}
+                    {{ e.description }}
+                {% endif %}
+            </p>
+
+        </div>
+
+    </div>
+{% endblock %}

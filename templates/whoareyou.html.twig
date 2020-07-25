@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+{% include 'components/navoff.html.twig' %}
+    <div id="particles-js">
+        <div class=" atc align-self-center ">
+
+            <div class="card bg-dark" style="width: 18rem;">
+                <div class="card-body bg-dark">
+                    <h5 class="card-title text-center text-white">Vous êtes un.e ? </h5>
+                    <div class="d-flex justify-content-around">
+                    {% for type in myType %}
+                    <a href="{{ path('signup', {'id': type.id }) }}" class="btn btn-primary">{{ type.name }}</a>
+                    {% endfor %}
+                </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock %}

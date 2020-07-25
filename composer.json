@@ -5,6 +5,7 @@
         "php": "^7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "lcobucci/jwt": "^3.3",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "5.1.*",
         "symfony/console": "5.1.*",
@@ -16,6 +17,8 @@
         "symfony/http-client": "5.1.*",
         "symfony/intl": "5.1.*",
         "symfony/mailer": "5.1.*",
+        "symfony/mercure-bundle": "^0.2.5",
+        "symfony/messenger": "5.1.*",
         "symfony/mime": "5.1.*",
         "symfony/monolog-bundle": "^3.1",
         "symfony/notifier": "5.1.*",
@@ -28,15 +31,20 @@
         "symfony/twig-pack": "*",
         "symfony/validator": "5.1.*",
         "symfony/web-link": "5.1.*",
-        "symfony/yaml": "5.1.*"
+        "symfony/yaml": "5.1.*",
+      "ext-json": "*"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
-        "symfony/maker-bundle": "^1.0",
+        "symfony/maker-bundle": "^1.19",
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*"
     },
     "config": {
+        "platform": {
+            "php": "7.2.22"
+        },
+
         "optimize-autoloader": true,
         "preferred-install": {
             "*": "dist"

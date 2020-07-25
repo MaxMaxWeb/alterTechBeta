@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+
+    <div class="container mt-3 text-white">
+        <div class="d-flex justify-content-center">
+           <h4> Candidatures pour l'offfre {{ of.name }} </h4>
+        </div>
+        <div class="container">
+            <table class="table table-dark">
+                <thead>
+                <tr>
+                    <th scope="col">Pseudo de l'apprenti</th>
+                    <th scope="col"> Ville de l'apprenti</th>
+                    <th scope="col"> Date de candidature</th>
+                    <th scope="col"> <i class="fas fa-eye"></i></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                    {% for c in cands %}
+                    <tr>
+                    {% for a in c.apprentis %}
+                        <td> {{ a.pseudo }}</td>
+                        {% if a.ville == of.ville %}
+                        <td> <i class="fas fa-home"></i> {{ a.ville }} </td>
+                        {% else %}
+                            <td> <i class="fas fa-plane-departure"></i> {{ a.ville }} </td>
+                        {% endif %}
+                        {% endfor %}
+                        <td> {{ c.createdat | date('d/m/Y') }}</td>
+                        <td> <a href="{{ path('watchCandid', {'id' :  c.id}) }}" class="noLink btn btn-success"> Voir la candidature </a></td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+{% endblock  %}

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+
+    <div class="container mt-3 text-white">
+        <div class="d-flex justify-content-around">
+            <h4>  Votre Profil </h4>
+            <a href="{{ path('updateapprofil', { 'id' : a.id}) }}" class="noLink"> <i class="fas fa-cog"></i> Modifier </a>
+        </div>
+        <hr class="bg-light">
+        <div class="container">
+            <p> pseudo : {{ a.pseudo }}</p>
+            <p> Ville : {{ a.ville }}</p>
+            <p> Niveau : {{ a.niveau.name }}</p>
+            <p> Compétences : <ul> {% for c in a.competences %}
+
+
+                <li> {{ c.name }}</li>
+                {% endfor %}
+            </ul>
+            </p>
+            <p> Description : {% if a.description is not null %}
+            {{ a.description }}
+                {% endif %}
+            </p>
+            <p> Ecole : {% if a.ecole is not null %}
+            {{ a.ecole }}
+                {% endif %}
+            </p>
+        </div>
+
+    </div>
+{% endblock %}

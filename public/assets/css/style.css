@@ -1,0 +1,27 @@
+.black-bg{
+    background-color: black;
+}
+
+.noLink{
+    color: inherit;
+}
+
+.fleche{
+    color: white;
+}
+
+.desc{
+    overflow-wrap: break-word;
+}
+
+.clickable{
+    cursor: pointer;
+}
+
+.owl-carousel .owl-stage-outer {
+    /* override */
+    overflow: initial;
+}
+
+
+

@@ -1,0 +1,377 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+
+    <div class="container mt-3 text-white">
+        <div class="d-flex justify-content-between">
+            <h5> Les Offres Compatibles</h5>
+            <div class="custom-control custom-switch">
+                <input  type="checkbox" class="custom-control-input clickable" id="switchOff">
+                <label class="custom-control-label text-warning" for="switchOff">   <i class=" warning fas fa-fire"></i> Voir les offres les plus compatibles </label>
+            </div>
+
+
+
+
+        </div>
+        <hr class="bg-light">
+        <div class="container">
+            <div class="row align-content-center">
+                {% if len <= 3 %}
+
+                {% for o in offres %}
+                    {% for offre in o %}
+                {% set cnt = 0 %}
+                {% for comp in offre.competences %}
+                    {% for ucomp in user.competences %}
+                        {% if comp.name == ucomp.name%}
+
+                            {% set cnt = cnt+1 %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                {% if cnt <= 2 %}
+                <div class="card col-3 ml-2 my-1 bg-dark notVery" id="" style="width: 18rem;">
+                    {% else %}
+                    <div class="card col-3 ml-2 my-1 bg-dark very"  style="width: 18rem;">
+                        {% endif %}
+                        <img class="card-img-top" style="width: 15rem; height: 8rem" src="{{ asset('assets/uploads/images/')}}{{offre.image}}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ offre.name }}</h5>
+                            {% if offre.description | length > 40 %}
+                                <p class="card-text"> ... </p>
+                            {% else %}
+                                <p class="card-text"> {{ offre.description }}</p>
+                            {% endif %}
+                            {% if offre.ville != user.ville %}
+                                <p> <i class="fas fa-plane-departure"></i> {{ offre.ville}} </p>
+                            {% else %}
+                                <p> <i class="fas fa-home"></i> {{ offre.ville }} </p>
+                            {% endif %}
+                            {% if offre.niveau != user.niveau %}
+                            <p> <i class="fas fa-exclamation-triangle"></i> {{ offre.niveau.name }}</p>
+                            {% else %}
+                            <p> <i class="fas fa-check"></i> {{ offre.niveau.name }}</p>
+                            {% endif %}
+                            {% if offre.domaine != null %}
+                            <p> {{ offre.domaine.name }}</p>
+                            {% endif %}
+
+                            {% if cnt <= 2 %}
+                                <p> {{ cnt }} compétences compatibles</p>
+                            {% else %}
+                                <p class="text-warning"> <i class=" warning fas fa-fire"></i> {{ cnt }} compétences compatibles</p>
+                            {% endif %}
+                            <p> publié le {{ offre.createdat | date ('d/m/Y') }}</p>
+                            <a class="noLink btn btn-primary" href="{{ path('seeOffr', { "id": offre.id }) }}"> Voir l'offre</a>
+
+                        </div>
+                    </div>
+
+                {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+            <div class="owl-carousel owl-theme mt-2 d-flex " id="owl">
+                {% for offre in offres %}
+
+
+
+
+
+
+
+
+                            {% set cnt = 0 %}
+                            {% for comp in offre.competences %}
+                                {% for ucomp in user.competences %}
+                                    {% if comp.name == ucomp.name%}
+
+                                        {% set cnt = cnt+1 %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+
+                            {% if cnt <= 2 %}
+                            <div class="card  ml-2 my-1 bg-dark notVery" id="" style="width: 18rem;">
+                                {% else %}
+                                    <div class="card  ml-2 my-1 bg-dark very"  style="width: 18rem;">
+                                    {% endif %}
+                                    <img class="card-img-top" style="width: 15rem; height: 8rem" src="{{ asset('assets/uploads/images/')}}{{offre.image}}" alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ offre.name }}</h5>
+                                    {% if offre.description | length > 40 %}
+                                        <p class="card-text"> ... </p>
+                                    {% else %}
+                                        <p class="card-text"> {{ offre.description }}</p>
+                                    {% endif %}
+                                    {% if offre.ville != user.ville %}
+                                        <p> <i class="fas fa-plane-departure"></i> {{ offre.ville}} </p>
+                                    {% else %}
+                                        <p> <i class="fas fa-home"></i> {{ offre.ville }} </p>
+                                    {% endif %}
+                                    {% if offre.niveau != user.niveau %}
+                                        <p> <i class="fas fa-exclamation-triangle"></i> {{ offre.niveau.name }}</p>
+                                    {% else %}
+                                        <p> <i class="fas fa-check"></i> {{ offre.niveau.name }}</p>
+                                    {% endif %}
+                                    {% if offre.domaine != null %}
+                                        <p> {{ offre.domaine.name }}</p>
+                                    {% endif %}
+
+                                    {% if cnt <= 2 %}
+                                        <p> {{ cnt }} compétence(s) compatibles</p>
+                                    {% else %}
+                                        <p class="text-warning"> <i class=" warning fas fa-fire"></i> {{ cnt }} compétences compatibles</p>
+                                    {% endif %}
+                                    <p> publié le {{ offre.createdat | date ('d/m/Y') }}</p>
+
+
+
+
+
+
+                                        {% if offre.candidatures is not empty  %}
+                                        {% for c in offre.candidatures.owner.candidatures  %}
+                                            {% for a in c.apprentis %}
+                                                {% if a.id == user.id and c.offres.id == offre.id %}
+
+
+
+
+                                                    <p> vous avez déjà postulé</p>
+
+
+
+                                                {% endif %}
+
+
+                                            {% endfor %}
+
+                                        {% endfor %}
+
+
+
+
+
+
+                                        {% endif %}
+
+
+
+                                        {% for c in offre.candidatures %}
+
+                                            {% for a in c.apprentis %}
+
+                                                {% if a.id != user.id and c.offres.id == offre.id  %}
+
+                                                    <a class="noLink btn btn-primary" href="{{ path('seeOffr', { "id": offre.id }) }}"> Voir l'offre </a>
+
+
+                                                {% endif %}
+
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                        {% if offre.candidatures is empty %}
+
+                                            <a class="noLink btn btn-primary" href="{{ path('seeOffr', { "id": offre.id }) }}"> Voir l'offre </a>
+
+
+                                        {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                </div>
+                    </div>
+
+
+
+
+
+
+                                {% endfor %}
+                                {% endif %}
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+        </div>
+
+    <div class="mt-4 text-white container">
+
+
+        <h5> Les Candidatures en cours</h5>
+
+
+        <hr class="bg-light">
+
+        <div class="container">
+
+            <div class="row align-content-center">
+                {% if candLen <= 3 %}
+                {% for c in cand %}
+
+
+
+
+                    <div class="card col-3 ml-2 my-1 bg-dark" style="width: 18rem;">
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ c.offres.name }}</h5>
+                            {% if c.traite != null %}
+                                <p><i class="fas fa-check"></i> traitée</p>
+                            {% else %}
+                                <p> <i class="fas fa-times"></i> Non traitée</p>
+                                {% endif %}
+                            {% if c.vu != null %}
+                                <p> <i class="fas fa-eye"></i> Vu</p>
+                            {% else %}
+                                <p> <i class="fas fa-eye-slash"></i> non vu</p>
+                                {% endif %}
+                        </div>
+                    </div>
+
+
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+            <div class="owl-carousel owl-theme mt-2 align-content-center  ">
+                {% for c in cand %}
+
+
+
+
+                    <div class="card  ml-2 my-1 bg-dark" id="" style="width: 18rem;">
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ c.offres.name }}</h5>
+                            {% if c.traite != null %}
+                                <p><i class="fas fa-check"></i> traitée</p>
+                            {% else %}
+                                <p> <i class="fas fa-times"></i> Non traitée</p>
+                            {% endif %}
+                            {% if c.vu != null %}
+                                <p> <i class="fas fa-eye"></i> Vu</p>
+                            {% else %}
+                                <p> <i class="fas fa-eye-slash"></i> non vu</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                {% endfor %}
+
+            </div>
+
+
+
+        {% endif %}
+
+
+
+    </div>
+    </div>
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+        <script>
+
+            $( document ).ready(function() {
+
+                let owl = $('.owl-carousel');
+                let all = $('.zero');
+                let hot = $('.very');
+                let oi = $('.owl-item')
+                let i = 0;
+                let f = $('.fleche')
+                console.log(f);
+
+                $("#switchOff").on('change', function () {
+
+                    for (let o of oi){
+
+                        if (o.innerText.includes('1 compétence') || o.innerText.includes('2 compétence') ){
+
+                            if(!$(o).hasClass('d-none')){
+                                $(o).addClass('d-none');
+
+                            }else {
+                                $(o).removeClass('d-none')
+                            }
+
+
+
+
+
+
+                        }
+
+
+
+
+
+
+
+                    }
+
+
+
+
+
+
+                });
+
+
+            })
+
+
+        </script>
+
+
+
+
+
+{% endblock %}
+
+
+
