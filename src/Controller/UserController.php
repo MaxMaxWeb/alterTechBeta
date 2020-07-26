@@ -363,13 +363,15 @@ class UserController extends AbstractController
 
     }
 
-    public function watchAction($id, CandidaturesRepository $cRepo, EntreprisesRepository $eRepo, UserRepository $uRepo, Request $request){
+    public function watchAction(MessageBusInterface $bus, $id, CandidaturesRepository $cRepo, EntreprisesRepository $eRepo, UserRepository $uRepo, Request $request){
         $c = $cRepo->find($id);
         $uId = $this->getUser()->getId();
         $u = $uRepo->find($uId);
         $rep = new Reponse();
 
         $ent = $u->getFicheEntreprise();
+        $app = $c->getApprentis()->getValues()[0]->getId();
+
 
         $entId = $ent->getId();
 
@@ -384,6 +386,13 @@ class UserController extends AbstractController
             $entityManager->persist($c);
             $entityManager->persist($rep);
             $entityManager->flush();
+            /**
+             *
+             * @Route("/message", name="sendMessage", methods={"POST"})
+             */
+            $target = [];
+
+
 
             return $this->redirectToRoute('homeEntr');
 

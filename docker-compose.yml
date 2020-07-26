@@ -27,3 +27,11 @@ services:
       - ${ADMINER_PORT}:8080
     networks:
       - symfony
+
+
+
+
+
+
+
+

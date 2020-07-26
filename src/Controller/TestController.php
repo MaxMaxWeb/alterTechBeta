@@ -4,26 +4,22 @@
 namespace App\Controller;
 
 
-use App\Entity\Reponse;
-use App\Mercure\MercureCookiesGenerator;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class TestController extends AbstractController
+class TestController extends AbstractController
 {
     /**
-     * @Route("/test", name="test")
+     * @Route("/test", name="testA")
      */
-    public function __invoke(MercureCookiesGenerator $mcg): Response
+    public function testA(): Response
     {
 
-        $response = $this->render('mercure.html.twig', []);
-
+        $response = $this->render('mercure.html.twig');
 
         return $response;
 
     }
-
 
 }

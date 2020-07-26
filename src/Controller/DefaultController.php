@@ -16,7 +16,7 @@ use App\Repository\CandidaturesRepository;
 use App\Repository\EntreprisesRepository;
 use App\Repository\OffresRepository;
 use App\Repository\UserRepository;
-use App\Mercure\MercureCookiesGenerator;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\MyTypeRepository;
@@ -181,7 +181,7 @@ class DefaultController extends AbstractController
 
     }
 
-    public function homeApprAction(MercureCookiesGenerator $mcg, UserRepository $userRepository, OffresRepository $offresRepository, CandidaturesRepository $cRep, ApprentisRepository $appR, Request $request){
+    public function homeApprAction(UserRepository $userRepository, OffresRepository $offresRepository, CandidaturesRepository $cRep, ApprentisRepository $appR, Request $request){
         $id = $this->getUser()->getId();
 
         $u = $userRepository->find($id);

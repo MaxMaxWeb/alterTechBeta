@@ -1,19 +1,18 @@
+
+
 {% extends 'base.html.twig' %}
 
 {% block body %}
     {% include 'components/navoff.html.twig' %}
     <div class="text-white">
-    <h1>AFSY - Mercure and Symfony</h1>
-    <div id="mercure-content-receiver"></div>
-    <form id="mercure-message-form" action="{{ path('sendMessage') }}" method="post">
-        <label for="mercure-message-input">Message:</label>
-        <input type="text" id="mercure-message-input" name="message"/>
-        <input type="submit" id="mercure-message-btn" value="Send"/>
-    </form>
-    </div>
+        <h1>AFSY - Mercure and Symfony</h1>
+        <div id="mercure-content-receiver"></div>
+
+
+
     <script type="text/javascript">
 
-        const _receiver = document.getElementById('mercure-content-receiver');
+ /*       const _receiver = document.getElementById('mercure-content-receiver');
         const _messageInput = document.getElementById('mercure-message-input');
         const _sendForm = document.getElementById('mercure-message-form');
 
@@ -39,18 +38,24 @@
             evt.preventDefault();
             return false;
         };
+        let url = new URL('{{ mercure_publish_url }}');
 
-        const url = new URL('{{ mercure_publish_url }}');
-        url.searchParams.append('topic', 'http://localhost:8000/test');
-        const eventSource = new EventSource(url);
-        console.log(eventSource)
+        url.searchParams.append('topic', 'http://localhost:8000/test2');
+        const eventSource = new EventSource(url, {withCredentials: true});
+        console.log(eventSource);
+
         eventSource.onmessage = (evt) => {
+
             const data = JSON.parse(evt.data);
 
             if (!data.message) {
                 return;
             }
+            console.log(eventSource)
+
             _receiver.insertAdjacentHTML('beforeend', `<div class="message">${data.message}</div>`);
         };
+*/
+
     </script>
 {% endblock %}
