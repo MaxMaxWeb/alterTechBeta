@@ -4,7 +4,6 @@
 namespace App\Controller;
 
 
-
 use App\Services\MercureCookieGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

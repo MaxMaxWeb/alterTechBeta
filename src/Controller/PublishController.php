@@ -24,7 +24,8 @@ class PublishController extends AbstractController
     public function sendMessage(PublisherInterface $pub, Request $request): RedirectResponse
     {
         $target = [
-            "http://127.0.0.1:8000/test2",
+
+            "http://127.0.0.1:8000/chat"
 
         ];
 
@@ -37,4 +38,7 @@ class PublishController extends AbstractController
 
         return $this->redirectToRoute('test2');
     }
+
+
 }
+
