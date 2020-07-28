@@ -86,6 +86,31 @@
         </div>
     </div>
 
+    <script>
+
+        const _messageInput = document.getElementById('reponse_message');
+        const _sendForm = document.getElementById('reponse_envoyer');
+
+        const sendNotif = (app) => {
+
+
+            fetch(_sendForm.action, {
+                headers: new Headers({
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                })
+            }).then(() => {
+                _messageInput.value = '';
+            });
+        };
+        _sendForm.onsubmit = (evt) => {
+            sendNotif(_messageInput.value);
+
+            evt.preventDefault();
+            return false;
+        };
+
+    </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf.min.js"></script>
 
     <script>

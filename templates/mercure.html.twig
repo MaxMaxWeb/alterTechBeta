@@ -15,10 +15,12 @@
         </form>
     </div>
 
+    <h1> HELLO </h1>
+
 
     <script type="text/javascript">
 
-       const _receiver = document.getElementById('mercure-content-receiver');
+
         const _messageInput = document.getElementById('mercure-message-input');
         const _sendForm = document.getElementById('mercure-message-form');
 
@@ -45,23 +47,7 @@
        };
 
 
-        let url = new URL('{{ mercure_publish_url }}');
 
-        url.searchParams.append('topic', 'http://localhost:8000/test2');
-        const eventSource = new EventSource(url, {withCredentials: true});
-        console.log(eventSource);
-
-        eventSource.onmessage = (evt) => {
-
-            const data = JSON.parse(evt.data);
-
-            if (!data.message) {
-                return;
-            }
-            console.log(eventSource)
-
-            _receiver.insertAdjacentHTML('beforeend', `<div class="message">${data.message}</div>`);
-        };
 
 
     </script>

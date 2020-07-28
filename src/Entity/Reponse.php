@@ -32,6 +32,11 @@ class Reponse
      */
     private $candidatures;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $checked;
+
 
 
     public function getId(): ?int
@@ -77,6 +82,18 @@ class Reponse
         if ($candidatures->getReponse() !== $newReponse) {
             $candidatures->setReponse($newReponse);
         }
+
+        return $this;
+    }
+
+    public function getChecked(): ?bool
+    {
+        return $this->checked;
+    }
+
+    public function setChecked(?bool $checked): self
+    {
+        $this->checked = $checked;
 
         return $this;
     }

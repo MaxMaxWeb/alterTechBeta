@@ -41,49 +41,34 @@
         <script src="{{ asset('assets/js/particles.js') }}"></script>
         <script src="{{ asset('assets/js/app.js') }}"></script>
         {% endblock %}
-        {% if c is defined %}
-        <script type="text/javascript">
+        {% if appId is defined %}
+            <script>
 
-     /*       const _receiver = document.getElementById('notif');
-            const _messageInput = document.getElementById('mercure-message-input');
-            const _sendForm = document.getElementById('reponse_message');
+                let url = new URL('{{ mercure_publish_url }}');
 
-            const sendMessage = (message) => {
-                if (message === '') {
-                    return;
-                }
+                url.searchParams.append('topic', 'http://localhost:8000/wtccandid/29');
+                const eventSource = new EventSource(url, {withCredentials: true});
 
-                fetch(_sendForm.action, {
-                    method: _sendForm.method,
-                    body: 'message=' + message,
-                    headers: new Headers({
-                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-                    })
-                }).then(() => {
-                    _messageInput.value = '';
-                });
-            };
 
-            _sendForm.onsubmit = (evt) => {
-                sendMessage(_messageInput.value);
+                eventSource.onmessage = (evt) => {
 
-                evt.preventDefault();
-                return false;
-            };
+                    const data = JSON.parse(evt.data);
 
-            const link = new URL('{{ mercure_publish_url }}');
-            link.searchParams.append('topic', 'http://localhost:8000//wtccandid/{{c.id}}');
-            const eventSource = new EventSource(link);
-            console.log(eventSource)
-            eventSource.onmessage = (evt) => {
-                const data = JSON.parse(evt.data);
+                    if (!data) {
+                        return;
+                    }
 
-                if (!data.message) {
-                    return;
-                }
-                _receiver.innerHTML( '<span class="badge badge-light">9</span>');
-            }; */
-        </script>
+                    let n = document.getElementById('notif');
+                    if (n.innerText === ""){
+                        console.log('empty')
+                        n.innerText = '1';
+                    } else {
+                        n.innerText = parseInt(n.innerText)+1;
+                    }
+
+
+                };
+            </script>
         {% endif %}
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

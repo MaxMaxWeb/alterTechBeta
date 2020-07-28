@@ -17,7 +17,13 @@
         </ul>
         <div>
             {% if  appId is defined %}
-             <a href="#" class="inline-block text-sm px-4 py-2    text-white  mt-4 lg:mt-0"> <i class="far fa-lg fa-bell" id="notif"></i> </a>
+             <a href="#" class="inline-block text-sm px-4 py-2    text-white  mt-4 lg:mt-0"> <span class="badge" id="notif">
+                     {% if notf == 0 %}
+
+                     {% else %}
+                        {{ notf }}
+                     {% endif %}
+                 </span> <i class="far fa-lg fa-bell" id="notif-bell"></i> </a>
             {% endif %}
             <a href="/logout" class="inline-block text-sm px-4 py-2   text-white    mt-4 lg:mt-0"> <i class="fas fa-lg fa-power-off"></i> </a>
 

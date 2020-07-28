@@ -18,31 +18,9 @@
     <script type="text/javascript">
 
         const _receiver = document.getElementById('mercure-content-receiver');
-        const _messageInput = document.getElementById('mercure-message-input');
-        const _sendForm = document.getElementById('mercure-message-form');
 
-        const sendMessageB = (message) => {
-            if (message === '') {
-                return;
-            }
 
-            fetch(_sendForm.action, {
-                method: _sendForm.method,
-                body: 'message=' + message,
-                headers: new Headers({
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-                })
-            }).then(() => {
-                _messageInput.value = '';
-            });
-        };
 
-        _sendForm.onsubmit = (evt) => {
-            sendMessageB(_messageInput.value);
-
-            evt.preventDefault();
-            return false;
-        };
         let url = new URL('{{ mercure_publish_url }}');
 
         url.searchParams.append('topic', 'http://localhost:8000/chat');

@@ -40,6 +40,7 @@ use App\Repository\MyTypeRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Controller\DefaultController;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 
 class UserController extends AbstractController
@@ -363,7 +364,7 @@ class UserController extends AbstractController
 
     }
 
-    public function watchAction(MessageBusInterface $bus, $id, CandidaturesRepository $cRepo, EntreprisesRepository $eRepo, UserRepository $uRepo, Request $request){
+    public function watchAction(PublisherInterface $pub, SerializerInterface $ser , $id, CandidaturesRepository $cRepo, EntreprisesRepository $eRepo, UserRepository $uRepo, Request $request){
         $c = $cRepo->find($id);
         $uId = $this->getUser()->getId();
         $u = $uRepo->find($uId);
@@ -386,15 +387,26 @@ class UserController extends AbstractController
             $entityManager->persist($c);
             $entityManager->persist($rep);
             $entityManager->flush();
-            /**
-             *
-             * @Route("/message", name="sendMessage", methods={"POST"})
-             */
-            $target = [];
+
+            $target = [
+                "http://localhost:8000/homeAppr/{$app}"
+            ];
+
+            $update = new Update('http://localhost:8000/wtccandid/29',
+                $ser->serialize($app, 'json', ['groups' => 'public']),
+                $target
+            );
+
+            $pub($update);
 
 
 
-            return $this->redirectToRoute('homeEntr');
+
+
+
+
+
+
 
 
 

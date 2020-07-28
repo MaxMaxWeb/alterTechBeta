@@ -258,6 +258,19 @@ class DefaultController extends AbstractController
         }
         $candLen = count($cand);
 
+        $cand = $cRep->findAll();
+
+        $i = 0;
+
+        foreach ($cand as $c){
+            if ($c->getApprentis()->getValues()[0]->getId() == $appId && $c->getReponse() != null){
+                if ($c->getReponse()->getChecked() == null)
+                $i++;
+            }
+        }
+
+
+
 
 
 
@@ -273,7 +286,8 @@ class DefaultController extends AbstractController
             'cand' => $cand,
             'candLen' => $candLen,
             'dsp' => $dsp,
-            'appId' => $appId
+            'appId' => $appId,
+            'notf' => $i
         ]);
 
 

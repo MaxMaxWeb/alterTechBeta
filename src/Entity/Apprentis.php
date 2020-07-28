@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ApprentisRepository::class)
@@ -19,6 +20,7 @@ class Apprentis
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups("public")
      */
     private $id;
 
@@ -29,6 +31,7 @@ class Apprentis
 
     /**
      * @ORM\Column(type="json")
+     * @Groups("public")
      */
     private $roles = [];
 
