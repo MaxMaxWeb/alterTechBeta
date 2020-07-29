@@ -11,7 +11,9 @@
         <div class="container">
             <p> pseudo : {{ a.pseudo }}</p>
             <p> Ville : {{ a.ville }}</p>
+            {% if a.niveau is not null %}
             <p> Niveau : {{ a.niveau.name }}</p>
+            {% endif %}
             <p> Compétences : <ul> {% for c in a.competences %}
 
 

@@ -74,6 +74,14 @@ ping:
   path: /ping
   controller: App\Controller\UserController::ping
 
+reponse:
+  path: /reponse
+  controller: App\Controller\UserController::watchReponse
+
+markAsRead:
+  path: /markAsRead
+  controller: App\Controller\UserController::markAsRead
+
 
 
 

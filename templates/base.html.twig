@@ -43,10 +43,11 @@
         {% endblock %}
         {% if appId is defined %}
             <script>
+                let audio = new Audio('../assets/sound/swiftly.mp3')
 
                 let url = new URL('{{ mercure_publish_url }}');
 
-                url.searchParams.append('topic', 'http://localhost:8000/wtccandid/29');
+                url.searchParams.append('topic', 'http://localhost:8000/wtccandid/');
                 const eventSource = new EventSource(url, {withCredentials: true});
 
 
@@ -60,11 +61,14 @@
 
                     let n = document.getElementById('notif');
                     if (n.innerText === ""){
-                        console.log('empty')
+
                         n.innerText = '1';
                     } else {
                         n.innerText = parseInt(n.innerText)+1;
                     }
+
+                        audio.play();
+
 
 
                 };

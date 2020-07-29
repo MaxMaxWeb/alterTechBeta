@@ -14,7 +14,9 @@
         {% if c.lettredemotiv is not null %}
             <button onclick="go()" id="btnl"  class=" btn btn-success d-none"  data-toggle="modal" data-target="#ldmModal"> Lettre de motivation </button>
         {% endif %}
+        {% if c.reponse is null %}
         <button class="btn-success btn mx-3" data-toggle="modal" data-target="#repModal"> Répondre à cette candidature</button>
+        {% endif %}
         <div class="d-flex justify-content-center mt-3">
 
 

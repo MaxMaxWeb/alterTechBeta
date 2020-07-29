@@ -19,6 +19,7 @@
                 <tbody>
 
                     {% for c in cands %}
+                        {% if c.reponse is null %}
                     <tr>
                     {% for a in c.apprentis %}
                         <td> {{ a.pseudo }}</td>
@@ -31,6 +32,7 @@
                         <td> {{ c.createdat | date('d/m/Y') }}</td>
                         <td> <a href="{{ path('watchCandid', {'id' :  c.id}) }}" class="noLink btn btn-success"> Voir la candidature </a></td>
                     </tr>
+                        {% endif %}
                     {% endfor %}
 
                 </tbody>

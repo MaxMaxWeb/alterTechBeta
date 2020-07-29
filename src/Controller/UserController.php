@@ -18,6 +18,7 @@ use App\Form\ReponseType;
 use App\Form\UserType;
 use App\Repository\CandidaturesRepository;
 use App\Repository\OffresRepository;
+use App\Repository\ReponseRepository;
 use App\Repository\UserRepository;
 use App\Services\FormsManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -200,7 +201,7 @@ class UserController extends AbstractController
 
  }
 
-    public function seeOffer(OffresRepository $offresRepository, $id, UserRepository $uRepo){
+    public function seeOffer(OffresRepository $offresRepository, $id, UserRepository $uRepo, CandidaturesRepository $cRep){
 
         $offre = $offresRepository->findBy(['id' => $id]);
         $uid = $this->getUser()->getId();
@@ -208,13 +209,24 @@ class UserController extends AbstractController
         $app = $u->getFicheApprenti();
         $appId = $app->getId();
 
+        $cand = $cRep->findAll();
+
+        $i = 0;
+
+        foreach ($cand as $c){
+            if ($c->getApprentis()->getValues()[0]->getId() == $appId && $c->getReponse() != null){
+                if ($c->getReponse()->getChecked() === null)
+                    $i++;
+            }
+        }
 
 
-        return $this->render('offre.html.twig', ['offre' => $offre, 'appId' => $appId]);
+
+        return $this->render('offre.html.twig', ['offre' => $offre, 'appId' => $appId, 'notf' => $i]);
 
     }
 
-    public function candidAction($id, OffresRepository $offR, Request $req, UserRepository $userR, ApprentisRepository $appR){
+    public function candidAction(CandidaturesRepository $cRep,$id, OffresRepository $offR, Request $req, UserRepository $userR, ApprentisRepository $appR){
 
         $uid = $this->getUser()->getId();
 
@@ -260,12 +272,26 @@ class UserController extends AbstractController
 
             $entityManager->flush();
 
+
             return $this->redirectToRoute('homeAppr');
 
 
         }
 
-        return $this->render('candidAct.html.twig', ['form' => $form->createView(), 'id' => $id, 'off' => $offre, 'appId' => $appId ]);
+        $cand = $cRep->findAll();
+
+        $i = 0;
+
+        foreach ($cand as $c){
+            if ($c->getApprentis()->getValues()[0]->getId() == $appId && $c->getReponse() != null){
+
+                if ($c->getReponse()->getChecked() === null)
+
+                    $i++;
+            }
+        }
+
+        return $this->render('candidAct.html.twig', ['form' => $form->createView(), 'id' => $id, 'off' => $offre, 'appId' => $appId, 'notf' => $i ]);
     }
 
 
@@ -298,18 +324,28 @@ class UserController extends AbstractController
 
     }
 
-    public function appProfilAction($id, ApprentisRepository $aRepo){
+    public function appProfilAction(CandidaturesRepository $cRep,$id, ApprentisRepository $aRepo){
         $a = $aRepo->find($id);
         $appId = $a->getId();
+        $cand = $cRep->findAll();
 
-        return $this->render('appProfil.html.twig', ['appId' => $appId, 'a' => $a]);
+        $i = 0;
+
+        foreach ($cand as $c){
+            if ($c->getApprentis()->getValues()[0]->getId() == $appId && $c->getReponse() != null){
+                if ($c->getReponse()->getChecked() === null)
+                    $i++;
+            }
+        }
+
+        return $this->render('appProfil.html.twig', ['appId' => $appId, 'a' => $a, 'notf' => $i]);
     }
 
-    public function upAprofilAction($id, ApprentisRepository $aRepo, Request $request){
+    public function upAprofilAction(CandidaturesRepository $cRep, $id, ApprentisRepository $aRepo, Request $request){
 
         $a = $aRepo->find($id);
 
-        $aId = $a->getId();
+        $appId = $a->getId();
 
         $aForm = $this->createForm(AppUpdateType::class, $a);
             $aForm->handleRequest($request);
@@ -324,8 +360,21 @@ class UserController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('appprofil', ['id' => $aId]);
+            $cand = $cRep->findAll();
+
+            $i = 0;
+
+            foreach ($cand as $c){
+                if ($c->getApprentis()->getValues()[0]->getId() == $appId && $c->getReponse() != null){
+                    if ($c->getReponse()->getChecked() === null)
+                        $i++;
+                }
+            }
+
+            return $this->redirectToRoute('appprofil', ['id' => $appId]);
         }
+
+
 
         return $this->render('upAprofil.html.twig', ['form' => $aForm->createView(), 'appId' => $aId]);
 
@@ -389,15 +438,20 @@ class UserController extends AbstractController
             $entityManager->flush();
 
             $target = [
-                "http://localhost:8000/homeAppr/{$app}"
+                "http://localhost:8000/{$app}",
+
             ];
 
-            $update = new Update('http://localhost:8000/wtccandid/29',
-                $ser->serialize($app, 'json', ['groups' => 'public']),
-                $target
-            );
+
+            $update = new Update('http://localhost:8000/wtccandid/', json_encode([ $c->getOffres()->getName(), $rep->getMessage(), $rep->getId()])
+        , $target);
+
+
+
+
 
             $pub($update);
+
 
 
 
@@ -419,8 +473,77 @@ class UserController extends AbstractController
 
     }
 
+    public function watchReponse(CandidaturesRepository $cRep, UserRepository $userR){
+        $uid = $this->getUser()->getId();
+
+        $user = $userR->find($uid);
 
 
+        $app = $user->getFicheApprenti();
+
+        $appId = $app->getId();
+
+        $cand = $cRep->findAll();
+        $rep = [];
+        $listRep = [];
+        foreach ($cand as $c){
+            if ($c->getApprentis()->getValues()[0]->getId() == $appId){
+
+                if ($c->getReponse() != null){
+                    array_push($rep, $c->getReponse());
+                }
+            }
+        }
+
+        foreach ($rep as $r){
+
+            if($r->getChecked() === null){
+               $r->setChecked(false);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($r);
+                $entityManager->flush();
+
+            }
+            array_push($listRep, $r);
+        }
+
+
+
+        $i = 0;
+
+
+
+        return $this->render('reponse.html.twig', ['appId' => $appId, 'notf' => $i, 'lr' => $listRep]);
+    }
+
+    /**
+     *
+     * @Route("/markAsRead", name="markAsRead", methods={"POST"})
+     */
+
+    public function markAsRead(UserRepository $uRep, ReponseRepository $rRep)
+    {
+
+
+        $uId = $this->getUser()->getId();
+        $u = $uRep->find($uId);
+        $app = $u->getFicheApprenti()->getId();
+
+        $rep = $rRep->find($_POST['id']);
+
+        $rep->setChecked(true);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($rep);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('reponse');
+
+
+
+
+
+
+    }
 
 
 

@@ -264,7 +264,7 @@ class DefaultController extends AbstractController
 
         foreach ($cand as $c){
             if ($c->getApprentis()->getValues()[0]->getId() == $appId && $c->getReponse() != null){
-                if ($c->getReponse()->getChecked() == null)
+                if ($c->getReponse()->getChecked() === null)
                 $i++;
             }
         }
