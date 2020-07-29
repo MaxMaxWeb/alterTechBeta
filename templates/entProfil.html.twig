@@ -11,8 +11,9 @@
         <div class="container">
             <p> pseudo : {{ e.name }}</p>
             <p> Ville : {{ e.ville }}</p>
-
+            {% if e.domaine.name is defined %}
             <p> Domaine : {{ e.domaine.name }}</p>
+            {% endif %}
             <p> Description : {% if e.description is not null %}
                     {{ e.description }}
                 {% endif %}

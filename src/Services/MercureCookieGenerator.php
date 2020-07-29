@@ -26,6 +26,7 @@ class MercureCookieGenerator
             ->set('mercure', ['subscribe' => ['*']])
             ->sign(new Sha384(), $this->secret)
             ->getToken();
+
         return "mercureAuthorization={$token};Path=/hub;HttpOnly;secure";
 
 
